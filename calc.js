@@ -1,13 +1,4 @@
 'use strict';
-//Временные элементы ввода
-const TEMP_INPUT_ELEMENTS_STR = 
-`<br><input type="number" name="big-shelf" id="big-shelf" value="0"><label for="big-shelf">Big Shelf</label><br>
-<input type="number" name="small-shelf" id="small-shelf" value="0"><label for="small-shelf">Small Shelf</label><br>
-<input type="number" name="gloves" id="gloves" value="0"><label for="gloves">gloves</label><br>
-<input type="number" name="large-grow-tray" id="large-grow-tray" value="0"><label for="large-grow-tray">Large Grow Tray</label><br>`;
-
-
-
 class CalcModel{
     CARD_TYPES = {
         SMALL_SHELF : parseInt("010", 2),
@@ -428,8 +419,11 @@ class CalcController{
 }
 
 class CalcView {
-    _controller;
-    calcDivElement;
+ TEMP_INPUT_ELEMENTS_STR = 
+`<br><input type="number" name="big-shelf" id="big-shelf" value="0"><label for="big-shelf">Big Shelf</label><br>
+<input type="number" name="small-shelf" id="small-shelf" value="0"><label for="small-shelf">Small Shelf</label><br>
+<input type="number" name="gloves" id="gloves" value="0"><label for="gloves">gloves</label><br>
+<input type="number" name="large-grow-tray" id="large-grow-tray" value="0"><label for="large-grow-tray">Large Grow Tray</label><br>`;
     
     constructor(calcDivId){
         this.calcDivElement = document.getElementById(calcDivId);
