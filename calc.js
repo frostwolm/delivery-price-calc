@@ -457,7 +457,7 @@ class CalcView {
         let contiesSelectStr = this.getSelectStr(this._controller._model.contriesList, ['select-contries'], 'contry-id');
         let calcBtnStr = '<button id="calc-btn">Calc</button>';
         let deliveryCostStr = `<div id="delivery-cost"></div>`;
-        this.calcDivElement.innerHTML = contiesSelectStr + TEMP_INPUT_ELEMENTS_STR + calcBtnStr + deliveryCostStr;
+        this.calcDivElement.innerHTML = contiesSelectStr + this.TEMP_INPUT_ELEMENTS_STR + calcBtnStr + deliveryCostStr;
     }
 
     getSelectStr(contriesArr, classes, id){
