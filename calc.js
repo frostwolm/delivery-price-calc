@@ -6,208 +6,207 @@ const TEMP_INPUT_ELEMENTS_STR =
 <input type="number" name="gloves" id="gloves" value="0"><label for="gloves">gloves</label><br>
 <input type="number" name="large-grow-tray" id="large-grow-tray" value="0"><label for="large-grow-tray">Large Grow Tray</label><br>`;
 
+const CARD_TYPES = {
+    SMALL_SHELF : parseInt("010", 2),
+    BIG_SHELF : parseInt("100", 2),
+    EXTRA_GOODS : parseInt("001", 2)
+};
 
+const FREE_COST_WEIGHT = 11;
+
+const GROUP_ID = {
+    BIG_SHELF: '1',
+    SMALL_SHELF: '2'
+}
+
+//Временные карточки товаров
+const TEMP_GOODS = [
+    {
+        id: 'big-shelf',
+        group_id:'1',
+        weight:0,
+        volWeight:0,
+        extraAdds:0
+    },
+    {
+        id: 'small-shelf',
+        group_id:'2',
+        weight:0,
+        volWeight:0,
+        extraAdds:0
+    },
+    {
+        id: 'gloves',
+        group_id:'4',
+        weight:0,
+        volWeight:0.32,
+        extraAdds:0
+    },
+    {
+        id: 'large-grow-tray',
+        group_id:'4',
+        weight:0.4,
+        volWeight:1.31,
+        extraAdds:0.28
+    },
+];
+
+const SHELFS_DELIVERY_PRECE = {
+    BIG_SHELF: {
+        '1' : 30,
+        '2' : 50,
+        '3' : 70,
+        '4' : 80,
+        '5' : 5
+    },
+    SMALL_SHELF: {
+        '1' : 10,
+        '2' : 10,
+        '3' : 30,
+        '4' : 80,
+        '5' : 5
+    }
+}
+
+const DELIVERY_PRICE = {
+    UNDER2KG : [
+        {
+            small_w: 0,
+            big_w: 0.1,
+            price: {
+                '1' : 1.72,
+                '2' : 1.72,
+                '3' : 1.52,
+                '4' : 1.52,
+                '5' : 0.79 
+            }
+        },
+        {
+            small_w: 0.101,
+            big_w: 0.500,
+            price: {
+                '1' : 3.05,
+                '2' : 3.05,
+                '3' : 3.79,
+                '4' : 3.79,
+                '5' : 0.99 
+            }
+        },
+        {
+            small_w: 0.501,
+            big_w: 1.000,
+            price: {
+                '1' : 5.6,
+                '2' : 5.6,
+                '3' : 8.41,
+                '4' : 8.41,
+                '5' : 1.19 
+            }
+        },
+        {
+            small_w: 1.001,
+            big_w: 2.000,
+            price: {
+                '1' : 8.41,
+                '2' : 8.41,
+                '3' : 12.62,
+                '4' : 12.62,
+                '5' : 1.59 
+            }
+        }
+    ],
+    OVER2KG : [
+        {
+            small_w: 2,
+            big_w: 4,
+            price: {
+                '1' : 1.72,
+                '2' : 1.72,
+                '3' : 1.52,
+                '4' : 1.52,
+                '5' : 0.79 
+            }
+        },
+        {
+            small_w: 4.001,
+            big_w: 6,
+            price: {
+                '1' : 3.05,
+                '2' : 3.05,
+                '3' : 3.79,
+                '4' : 3.79,
+                '5' : 0.99 
+            }
+        },
+        {
+            small_w: 6.001,
+            big_w: 8,
+            price: {
+                '1' : 5.6,
+                '2' : 5.6,
+                '3' : 8.41,
+                '4' : 8.41,
+                '5' : 1.19 
+            }
+        },
+        {
+            small_w: 8.001,
+            big_w: 10,
+            price: {
+                '1' : 8.41,
+                '2' : 8.41,
+                '3' : 12.62,
+                '4' : 12.62,
+                '5' : 1.59 
+            }
+        }
+    ]
+}
+
+const CONTRIES_ZONES = {
+'Estonia':1,
+'Latvia':1, 
+'Poland':1,
+
+'Denmark':2,
+'Finland':2,
+'Germany':2,
+'Sweden':2,
+'Ireland':2,
+'Austria':2,
+'Belgium':2,
+'Spain':2,
+'Italy':2,
+'Great Britain':2,
+'Luksemburg':2,
+'Monaco':2,
+'Holland/Netherlands':2,
+'France':2,
+'Slovakia':2,
+'Vatican':2,
+'Hungary':2,
+'Czech republic':2,
+'Bulgaria':2,
+'Greece':2,
+'Croatia':2,
+'Portugal':2,
+'Romania':2,
+'Slovenia':2,
+
+'Lichtenstein':3,
+'Norway':3,
+'Switzerland':3,
+
+'Iceland':4,
+
+'Lithuania':5
+};
 
 class CalcModel{
-    CARD_TYPES = {
-        SMALL_SHELF : parseInt("010", 2),
-        BIG_SHELF : parseInt("100", 2),
-        EXTRA_GOODS : parseInt("001", 2)
-    };
-    
-    FREE_COST_WEIGHT = 11;
-    
-    GROUP_ID = {
-        BIG_SHELF: '1',
-        SMALL_SHELF: '2'
-    }
-    
-    //Временные карточки товаров
-    TEMP_GOODS = [
-        {
-            id: 'big-shelf',
-            group_id:'1',
-            weight:0,
-            volWeight:0,
-            extraAdds:0
-        },
-        {
-            id: 'small-shelf',
-            group_id:'2',
-            weight:0,
-            volWeight:0,
-            extraAdds:0
-        },
-        {
-            id: 'gloves',
-            group_id:'4',
-            weight:0,
-            volWeight:0.32,
-            extraAdds:0
-        },
-        {
-            id: 'large-grow-tray',
-            group_id:'4',
-            weight:0.4,
-            volWeight:1.31,
-            extraAdds:0.28
-        },
-    ];
-    
-    SHELFS_DELIVERY_PRECE = {
-        BIG_SHELF: {
-            '1' : 30,
-            '2' : 50,
-            '3' : 70,
-            '4' : 80,
-            '5' : 5
-        },
-        SMALL_SHELF: {
-            '1' : 10,
-            '2' : 10,
-            '3' : 30,
-            '4' : 80,
-            '5' : 5
-        }
-    }
-    
-    DELIVERY_PRICE = {
-        UNDER2KG : [
-            {
-                small_w: 0,
-                big_w: 0.1,
-                price: {
-                    '1' : 1.72,
-                    '2' : 1.72,
-                    '3' : 1.52,
-                    '4' : 1.52,
-                    '5' : 0.79 
-                }
-            },
-            {
-                small_w: 0.101,
-                big_w: 0.500,
-                price: {
-                    '1' : 3.05,
-                    '2' : 3.05,
-                    '3' : 3.79,
-                    '4' : 3.79,
-                    '5' : 0.99 
-                }
-            },
-            {
-                small_w: 0.501,
-                big_w: 1.000,
-                price: {
-                    '1' : 5.6,
-                    '2' : 5.6,
-                    '3' : 8.41,
-                    '4' : 8.41,
-                    '5' : 1.19 
-                }
-            },
-            {
-                small_w: 1.001,
-                big_w: 2.000,
-                price: {
-                    '1' : 8.41,
-                    '2' : 8.41,
-                    '3' : 12.62,
-                    '4' : 12.62,
-                    '5' : 1.59 
-                }
-            }
-        ],
-        OVER2KG : [
-            {
-                small_w: 2,
-                big_w: 4,
-                price: {
-                    '1' : 1.72,
-                    '2' : 1.72,
-                    '3' : 1.52,
-                    '4' : 1.52,
-                    '5' : 0.79 
-                }
-            },
-            {
-                small_w: 4.001,
-                big_w: 6,
-                price: {
-                    '1' : 3.05,
-                    '2' : 3.05,
-                    '3' : 3.79,
-                    '4' : 3.79,
-                    '5' : 0.99 
-                }
-            },
-            {
-                small_w: 6.001,
-                big_w: 8,
-                price: {
-                    '1' : 5.6,
-                    '2' : 5.6,
-                    '3' : 8.41,
-                    '4' : 8.41,
-                    '5' : 1.19 
-                }
-            },
-            {
-                small_w: 8.001,
-                big_w: 10,
-                price: {
-                    '1' : 8.41,
-                    '2' : 8.41,
-                    '3' : 12.62,
-                    '4' : 12.62,
-                    '5' : 1.59 
-                }
-            }
-        ]
-    }
-    
-    CONTRIES_ZONES = {
-    'Estonia':1,
-    'Latvia':1, 
-    'Poland':1,
-    
-    'Denmark':2,
-    'Finland':2,
-    'Germany':2,
-    'Sweden':2,
-    'Ireland':2,
-    'Austria':2,
-    'Belgium':2,
-    'Spain':2,
-    'Italy':2,
-    'Great Britain':2,
-    'Luksemburg':2,
-    'Monaco':2,
-    'Holland/Netherlands':2,
-    'France':2,
-    'Slovakia':2,
-    'Vatican':2,
-    'Hungary':2,
-    'Czech republic':2,
-    'Bulgaria':2,
-    'Greece':2,
-    'Croatia':2,
-    'Portugal':2,
-    'Romania':2,
-    'Slovenia':2,
-    
-    'Lichtenstein':3,
-    'Norway':3,
-    'Switzerland':3,
-    
-    'Iceland':4,
-    
-    'Lithuania':5
-    };
-
-    constructor(){
-        //TODO: Написать fetch для получения данных о списке зон, ценах и товарах
-        this._contries = Object.keys(this.CONTRIES_ZONES);
+    _controller;
+    _contries;
+    constructor(zones){
+        this._contries = Object.keys(zones);
     }
 
     get contriesList(){
@@ -487,7 +486,7 @@ class CalcView {
     }
 }
 
-let calcModel = new CalcModel();
+let calcModel = new CalcModel(CONTRIES_ZONES);
 let calcView = new CalcView('calc');
 let calcController = new CalcController(calcModel, calcView);
 calcView.setHtmlElements();
